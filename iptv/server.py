@@ -53,7 +53,7 @@ def simplify(text,base):
   attrs=meta.rsplit(',',1)[0]
   attrs=re.sub(r'group-title="[^"]*"','group-title="'+category+'"',attrs)
   selected[key]=(category,name,attrs+','+name,urllib.parse.urljoin(base,line))
- order={'央视':0,'卫视':1,'上海':2,'河南':3}
+ order={'上海':0,'河南':1,'央视':2,'卫视':3}
  entries=sorted(selected.values(),key=lambda x:order[x[0]])
  if not entries:raise ValueError('No selected channels')
  out=[lines[0]]
@@ -88,6 +88,10 @@ def refresh():
   logging.warning('Refresh failed (%s); retaining last good playlist',type(error).__name__)
 
 def updater():
+ # Reuse a fresh cache across restarts rather than refetching immediately.
+ if CACHE.exists() and state.get('last_success'):
+  delay=max(0,min(1800,1800-(time.time()-state['last_success'])))
+  if delay:time.sleep(delay)
  while True:
   refresh()
   time.sleep(1800 if state.get('ok') else 300)
