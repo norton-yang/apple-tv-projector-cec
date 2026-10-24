@@ -1,0 +1,6 @@
+keys/
+adbkey*
+*.pem
+*.log
+__pycache__/
+.env

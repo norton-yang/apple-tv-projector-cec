@@ -1,0 +1,10 @@
+services:
+  bridge:
+    build: .
+    container_name: apple-tv-projector-cec
+    network_mode: host
+    restart: unless-stopped
+    environment:
+      TZ: Asia/Singapore
+    volumes:
+      - ./keys:/keys:ro
