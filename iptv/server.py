@@ -39,17 +39,13 @@ def simplify(text,base):
    if name in ['新闻综合','都市频道','新纪实','魔都眼','爱上海']:
     name='上海'+name
   elif group=='河南专区':
-   if '开封' in name:category='开封'
-   elif '购物' in name:continue
-   elif name.startswith('河南') or name in {
-    '都市频道','民生频道','法治频道','电视频道','新闻频道',
-    '公共频道','梨园频道','文物宝库','武术世界','移动戏曲',
-    '象视界','睛彩中原','国学频道'}:
+   aliases={'都市频道':'河南都市','民生频道':'河南民生',
+    '法治频道':'河南法治','电视频道':'河南电视剧',
+    '新闻频道':'河南新闻','公共频道':'河南公共'}
+   name=aliases.get(name,name)
+   if name in {'河南都市','河南民生','河南法治',
+    '河南电视剧','河南新闻','河南公共'}:
     category='河南'
-    aliases={'都市频道':'河南都市','民生频道':'河南民生',
-     '法治频道':'河南法治','电视频道':'河南电视剧',
-     '新闻频道':'河南新闻','公共频道':'河南公共','梨园频道':'河南梨园'}
-    name=aliases.get(name,name)
   if category is None:continue
   key=name.casefold().replace(' ','')
   if key in selected:continue
@@ -57,11 +53,9 @@ def simplify(text,base):
   attrs=meta.rsplit(',',1)[0]
   attrs=re.sub(r'group-title="[^"]*"','group-title="'+category+'"',attrs)
   selected[key]=(category,name,attrs+','+name,urllib.parse.urljoin(base,line))
- order={'央视':0,'卫视':1,'上海':2,'河南':3,'开封':4}
+ order={'央视':0,'卫视':1,'上海':2,'河南':3}
  entries=sorted(selected.values(),key=lambda x:order[x[0]])
  if not entries:raise ValueError('No selected channels')
- if not any(x[0]=='开封' for x in entries):
-  logging.warning('No Kaifeng channel in current upstream')
  out=[lines[0]]
  counts=Counter()
  for category,name,meta,url in entries:
