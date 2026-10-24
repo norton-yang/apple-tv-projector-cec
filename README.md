@@ -68,3 +68,7 @@ adb -s 192.168.0.111:5555 shell settings delete global hdmi_control_auto_wakeup_
 Home Assistant 内之前创建的两条 Apple TV 电源联动自动化已停用：旧版 Apple TV 库不能可靠读取该设备的电源状态。当前联动与 Home Assistant 的 Apple TV 集成无关。
 
 注意：脚本依赖此固件的 `dumpsys hdmi_control` 文本格式及 CEC 地址；更换设备、固件或 HDMI 拓扑后应重新验证。服务初次启动不补执行启动前的关机消息。
+
+## 局域网精简订阅服务
+
+另见 [iptv/README.md](iptv/README.md)：为 APTV 提供精简频道列表，成功每30分钟更新，失败每5分钟重试。独立容器运行，不影响 CEC 联动；不包含真实订阅地址和频道缓存。

@@ -1,0 +1,15 @@
+services:
+  iptv:
+    build: .
+    container_name: iptv-local
+    network_mode: host
+    restart: unless-stopped
+    environment:
+      TZ: Asia/Singapore
+    volumes:
+      - ./data:/data
+    logging:
+      driver: json-file
+      options:
+        max-size: 5m
+        max-file: "2"
